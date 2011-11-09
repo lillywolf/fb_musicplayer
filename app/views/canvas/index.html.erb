@@ -34,12 +34,12 @@
         <script type="text/javascript" src="history/history.js"></script>
         <!-- END Browser History required section -->  
             
-        <script type="text/javascript" src="site/swfobject.js"></script>
+        <script type="text/javascript" src="/site/swfobject.js"></script>
         <script type="text/javascript">
             // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. 
             var swfVersionStr = "10.2.0";
             // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
-            var xiSwfUrlStr = "site/playerProductInstall.swf";
+            var xiSwfUrlStr = "/site/playerProductInstall.swf";
             var flashvars = {};
             var params = {};
             params.quality = "high";
@@ -51,7 +51,7 @@
             attributes.name = "Main";
             attributes.align = "middle";
             swfobject.embedSWF(
-                "site/Main.swf", "flashContent", 
+                "/site/Main.swf", "flashContent", 
                 "510", "100%", 
                 swfVersionStr, xiSwfUrlStr, 
                 flashvars, params, attributes);
@@ -78,13 +78,13 @@
         
         <noscript>
             <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" id="Main">
-                <param name="movie" value="site/Main.swf" />
+                <param name="movie" value="/site/Main.swf" />
                 <param name="quality" value="high" />
                 <param name="bgcolor" value="#ffffff" />
                 <param name="allowScriptAccess" value="sameDomain" />
                 <param name="allowFullScreen" value="true" />
                 <!--[if !IE]>-->
-                <object type="application/x-shockwave-flash" data="site/Main.swf" width="100%" height="100%">
+                <object type="application/x-shockwave-flash" data="/site/Main.swf" width="100%" height="100%">
                     <param name="quality" value="high" />
                     <param name="bgcolor" value="#ffffff" />
                     <param name="allowScriptAccess" value="sameDomain" />

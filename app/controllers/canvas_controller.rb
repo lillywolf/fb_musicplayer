@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'json'
-require 'net/https'
+# require 'net/https'
 require 'httpclient'
 
 class CanvasController < ApplicationController

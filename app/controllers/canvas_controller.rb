@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'koala'
 require 'json'
 require 'net/https'
 require 'httpclient'

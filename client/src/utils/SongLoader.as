@@ -42,6 +42,7 @@ package utils
 		{
 			_song = song;
 			urlRequest = _scClient.getSignedURLRequest(_song.url);
+//			urlRequest = new URLRequest(_song.url);
 			sound = new Sound(urlRequest);
 		}
 		

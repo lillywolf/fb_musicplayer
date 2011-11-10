@@ -34,7 +34,7 @@ package music
 			addEventListener(Event.ENTER_FRAME, onEnterFrame);	
 		}
 		
-		public function initialize(scClient:SoundcloudClient):void
+		public function initialize(scClient:SoundcloudClient=null):void
 		{
 			// Initialize first song
 			songLoader.scClient = scClient;
@@ -64,7 +64,7 @@ package music
 		{
 			clearSongItems();
 			songItems = new Array();
-			for (var i:int = currentSongIndex; i < NUM_SONGS_DISPLAYED + currentSongIndex; i++)
+			for (var i:int = currentSongIndex; i < Math.min(NUM_SONGS_DISPLAYED + currentSongIndex, _songs.length); i++)
 			{
 				var si:SongItem = new SongItem(this);
 				si.createSongClip(songs[i]);

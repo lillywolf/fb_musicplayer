@@ -90,7 +90,7 @@ package utils
 					url: trackXML.child("stream-url"),
 					duration: trackXML.child("duration"),
 					play_count: trackXML.child("playback-count"),
-					can_download: true, 
+					can_download: trackXML.child("downloadable"), 
 					download_url: trackXML.child("download-url"),
 					can_buy: false,
 					buy_url: trackXML.child("purchase-url")});

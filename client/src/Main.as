@@ -1,7 +1,5 @@
 package
-{
-	import basic_ui_fla.button_buy_blue_8;
-	
+{	
 	import events.PlayerEvent;
 	
 	import flash.display.SimpleButton;
@@ -20,6 +18,12 @@ package
 		private var scManager:SoundCloudManager;
 		private var verificationCode:TextField;
 		
+		public var LOCAL_SONGS:Array = [
+			{title: "Everybody On Your Block", url: "/site/mp3/everybody_on_your_block.mp3", duration: 180000, play_count: 100, can_download: true, download_url: "", can_buy: false, buy_url: ""},		
+			{title: "The Devil You Know", url: "/site/mp3/the_devil_you_know.mp3", duration: 180000, play_count: 100, can_download: false, download_url: "", can_buy: false, buy_url: ""},		
+			{title: "Love Too Serious", url: "/site/mp3/love_too_serious.mp3", duration: 180000, play_count: 100, can_download: true, download_url: "", can_buy: false, buy_url: ""}		
+			];
+		
 		[Embed(source='fonts/Arial.ttf', fontFamily="Arial", embedAsCFF="false")]
 		public var Arial:Class;
 		
@@ -27,6 +31,7 @@ package
 		{
 			Security.allowDomain("*");
 			musicPlayer = new MusicPlayer();
+//			musicPlayer.songs = LOCAL_SONGS;
 			scManager = new SoundCloudManager(musicPlayer);	
 			scManager.addEventListener(PlayerEvent.SOUNDCLOUD_TRACKS_LOADED, onSoundCloudTracksLoaded);
 			addChild(musicPlayer);

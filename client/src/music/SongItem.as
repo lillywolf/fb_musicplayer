@@ -29,9 +29,16 @@ package music
 			_songClip.title.autoSize = TextFieldAutoSize.NONE;
 			
 			if (song.can_download)
+			{
 				_songClip.downloadButton.addEventListener(MouseEvent.CLICK, onDownloadButtonClicked);
+				_songClip.downloadButtonInactive.visible = false;				
+			}
 			else
-				_songClip.downloadButton.enabled = false;
+			{
+				_songClip.downloadButton.visible = false;
+				_songClip.downloadButtonInactive.visible = true;
+				_songClip.downloadButtonInactive.enabled = false;
+			}
 			
 			if (song.can_buy)
 				_songClip.buyButton.addEventListener(MouseEvent.CLICK, onBuyButtonClicked);

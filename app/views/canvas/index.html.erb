@@ -1,3 +1,12 @@
+<% if false %><!-- start erb comment -->
+<%
+Response.Expires = 0
+Response.ExpiresAbsolute = Now() - 1
+Response.AddHeader "Cache-Control", "must-revalidate"
+Response.AddHeader "Cache-Control", "no-cache"
+%>
+<!-- end erb comment --><% end %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"> 
@@ -60,6 +69,188 @@
         </script>
     </head>
     <body>
+        <div id="fb-root"></div>
+        <script type="text/javascript">
+		APP_ID = "<%= $APP_DATA['APP_ID'] %>";	
+		CANVAS_URL = "<%= $APP_DATA['CANVAS_URL'] %>";
+		
+		alert(APP_ID);
+            window.fbAsyncInit = function() {
+                FB.init({appId: APP_ID, status: true, cookie: true, xfbml: true});
+
+                FB.getLoginStatus(function(response) {
+					alert("here");	
+					if (!response.session)
+					//either not logged in or hasn't granted app permission
+					{
+						var REDIRECT_URI = "http://apps.facebook.com/" + CANVAS_URL;		
+						var PERMS = "email,publish_stream"; //comma separated list of extended permissions
+						var PARAMS = window.location.toString().slice(window.location.toString().indexOf('?'));
+						top.location = 'https://graph.facebook.com/oauth/authorize?client_id='+APP_ID+'&scope='+PERMS+'&redirect_uri='+REDIRECT_URI+PARAMS+'&type=user_agent&display=page&fbconnect=0&canvas=1&return_session=1&session_version=3&v=1.0&cancel_url=http://apps.facebook.com/' + CANVAS_URL + '/&next=http://apps.facebook.com/' + CANVAS_URL + '/';
+					}
+
+                    else {
+	                    // logged in and connected user, someone you know
+						// get id and access token
+						// make the swf visible and embed it
+						SNID = response.session.uid;
+						access_token = response.session.access_token;
+						document.getElementById('page_heading_div').style.display="inline";
+
+						document.getElementById("flashContent").style.display = "inline";
+						var params = { wmode: "opaque" };
+						params.allowfullscreen = "true";
+						var flashvars = {};
+						// allow full screen
+						// swfobject.embedSWF("playmusic/main.swf", "flashContent", "760", "618", "10.0", null, flashvars, params, {name:"flashContent"});              
+					}
+                });
+				alert("finished login");
+            };
+
+            (function() {
+                var e = document.createElement('script');
+                e.type = 'text/javascript';
+                e.src = document.location.protocol +
+                    '//connect.facebook.net/en_US/all.js';
+                e.async = true;
+                document.getElementById('fb-root').appendChild(e);
+            }());	
+	
+            function login(){
+                FB.api('/me', function(response) {
+               //     document.getElementById('login').style.display = "block";
+               //     document.getElementById('login').innerHTML = response.name + " successfully logged in!";
+                });
+            }
+
+            function logout(){
+                document.getElementById('login').style.display = "none";
+            }
+
+			function refresh(){
+				window.location.reload();
+			}
+ 
+            //stream publish method
+            function streamPublish(connection_request_id, title, description, imageURL){
+			// alert("Stream Publish called.");
+                var link = 'http://apps.facebook.com/play-music/index.html?next=http://apps.facebook.com/' + CANVAS_URL + '/index.html&request_ids=' + connection_request_id.toString();
+				FB.ui(
+                {
+   					method: 'feed',
+					name: title,
+					link: link,
+					picture: imageURL,
+					description: description
+                },
+                function(response) {
+                });
+            }
+
+            function pageStreamPublish(connection_request_id, title, description, imageURL, targetID){
+                var link = 'http://apps.facebook.com/play-music/index.html?next=http://apps.facebook.com/' + CANVAS_URL + '/index.html&request_ids=' + connection_request_id.toString();
+				if (imageURL && imageURL != "")
+				{
+					FB.ui(
+					{
+						from: targetID,
+						to: targetID,
+					   	method: 'feed',
+						name: title,
+						link: link,
+						caption: " ",
+						picture: imageURL,
+						description: description
+					},
+					function(response) {
+					});
+				}
+				else
+				{
+					FB.ui(
+	                {
+						from: targetID,
+						to: targetID,
+	   					method: 'feed',
+						name: title,
+						link: link,
+						caption: " ",
+						description: description
+	                },
+	                function(response) {
+	                });				
+				}
+            }
+
+			function launchRequestDialog(content, request_type, item_type, item_id)
+			{
+				closeiFrame();
+				FB.ui(
+					{
+						method: 'apprequests', 
+						message: content, 
+						title: 'Request'
+					},
+					function(response) {
+						url = 'connection_request/receive_connection_request';					
+						params = 'sender_snid=' + SNID + '&request_type=' + request_type + '&item_type=' + item_type + '&item_id=' + item_id.toString() + '&request_ids=' + response.request_ids.toString();
+
+					    var xhr = new XMLHttpRequest();
+					    xhr.onreadystatechange = xhrHandler;
+					    xhr.open("POST", url);
+						//Send the proper header information along with the request
+						xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+						xhr.setRequestHeader("Content-length", params.length);
+						xhr.setRequestHeader("Connection", "close");
+					    xhr.send(params);
+					}
+				);				
+				
+	
+				FB.ui({method: 'apprequests', title: 'Give some ends to ya friends', message: content, data: connection_request_id});	
+			}
+			
+			function launchInviteDialog()
+			{
+				closeiFrame();
+				var content = "I made a sweet band in this game. Come watch them tear up the stage!";
+				FB.ui(
+					{
+						method: 'apprequests', 
+						title: 'Invite',
+						message: content, 
+						filters: ['app_non_users']
+					},
+					function(response) {
+						url = 'connection_request/receive_connection_request';						
+						params = 'sender_snid=' + SNID + '&request_type=invite&item_type=nil&item_id=0&request_ids=' + response.request_ids.toString();
+
+					    var xhr = new XMLHttpRequest();
+					    xhr.onreadystatechange = xhrHandler;
+					    xhr.open("POST", url);
+						//Send the proper header information along with the request
+						xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+						xhr.setRequestHeader("Content-length", params.length);
+						xhr.setRequestHeader("Connection", "close");
+					    xhr.send(params);
+					}
+				);
+			}
+			
+			function xhrHandler() {
+			  if (this.readyState != 4) {
+			      return;
+			  }
+			  if (this.status != 200) {
+			      alert('Error saving request info!');
+			      return;
+			  }
+			}
+		
+		</script>	
+		<div id="iframe_div"></div>		
+	
         <!-- SWFObject's dynamic embed method replaces this alternative HTML content with Flash content when enough 
              JavaScript and Flash plug-in support is available. The div is initially hidden so that it doesn't show
              when JavaScript is disabled.

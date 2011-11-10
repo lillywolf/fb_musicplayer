@@ -69,6 +69,7 @@ Response.AddHeader "Cache-Control", "no-cache"
         </script>
     </head>
     <body>
+		<div id="page_heading_div" class="hidden"></div>
         <div id="fb-root"></div>
         <script type="text/javascript">
 		APP_ID = "<%= $APP_DATA['APP_ID'] %>";	
@@ -79,7 +80,7 @@ Response.AddHeader "Cache-Control", "no-cache"
                 FB.init({appId: APP_ID, status: true, cookie: true, xfbml: true});
 
                 FB.getLoginStatus(function(response) {
-					alert("here");	
+					alert("session: " + response.session);	
 					if (!response.session)
 					//either not logged in or hasn't granted app permission
 					{

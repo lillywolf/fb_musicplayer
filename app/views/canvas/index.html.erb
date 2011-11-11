@@ -10,16 +10,58 @@ Response.AddHeader "Cache-Control", "no-cache"
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
     <head>
+        <meta name="google" value="notranslate" />         	
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	 	<!-- Include support libraries -->
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>		
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-		<!-- Include FBJSBridge to allow for SWF to Facebook communication. -->
-		<script type="text/javascript" src="/site/FBJSBridge.js"></script>
-		<!--%= javascript_include_tag :all, :cache => true %-->
-		<!--%= stylesheet_link_tag :all, :cache => true %-->		
 		<%= javascript_include_tag :all%>
 		<%= stylesheet_link_tag :all%>
+        <title></title>
+        <!-- Include CSS to eliminate any default margins/padding and set the height of the html element and 
+             the body element to 100%, because Firefox, or any Gecko based browser, interprets percentage as 
+             the percentage of the height of its parent container, which has to be set explicitly.  Fix for
+             Firefox 3.6 focus border issues.  Initially, don't display flashContent div so it won't show 
+             if JavaScript disabled.
+        -->
+        <style type="text/css" media="screen"> 
+            html, body  { height:100%; }
+            body { margin:0; padding:0; overflow:auto; text-align:center; 
+                   background-color: #ffffff; }   
+            object:focus { outline:none; }
+            #flashContent { display:none; }
+        </style>
+        
+        <!-- Enable Browser History by replacing useBrowserHistory tokens with two hyphens -->
+        <!-- BEGIN Browser History required section -->
+        <link rel="stylesheet" type="text/css" href="/site/history/history.css" />
+        <script type="text/javascript" src="/site/history/history.js"></script>
+        <!-- END Browser History required section -->  
+	 	<!-- Include support libraries -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>            
+        <script type="text/javascript" src="/site/swfobject.js"></script>
+		<!-- Include FBJSBridge to allow for SWF to Facebook communication. -->
+		<script type="text/javascript" src="/site/FBJSBridge.js"></script>
+        <script type="text/javascript">
+            // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. 
+            var swfVersionStr = "10.2.0";
+            // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
+            var xiSwfUrlStr = "/site/playerProductInstall.swf";
+            var flashvars = {};
+            var params = {};
+            params.quality = "high";
+            params.bgcolor = "#ffffff";
+            params.allowscriptaccess = "sameDomain";
+            params.allowfullscreen = "true";
+            var attributes = {};
+            attributes.id = "Main";
+            attributes.name = "Main";
+            attributes.align = "middle";
+            swfobject.embedSWF(
+                "/site/Main.swf", "flashContent", 
+                "510", "100%", 
+                swfVersionStr, xiSwfUrlStr, 
+                flashvars, params, attributes);
+            // JavaScript enabled so display the flashContent div in case it is not replaced with a swf object.
+            swfobject.createCSS("#flashContent", "display:block;text-align:left;");
+        </script>		
 
     </head>
     <body>
@@ -153,86 +195,12 @@ Response.AddHeader "Cache-Control", "no-cache"
 				document.getElementById('iframe_div').innerHTML = '<iframe id="frame" width="100%" height="100%" src ="/canvas/VIPlist" frameborder="0" />';
 				document.getElementById('iframe_div').className="iframe_div_visible";
 			}
-			
-/*			function callInviteFromTabs()
-			{
-				document.getElementById('flashContent').callInviteFromAS();
-			}
-*/			
+		
 			function streamPublishFromTabs()
 			{
 				document.getElementById('flashContent').callSelfPagePostFromAS();
 			}
-/*			
-			function launchInviteFrame(connection_request_id, button_label, excludeIDs)
-			{
-				document.getElementById('iframe_div').innerHTML = '<iframe id="frame" width="100%" height="100%" src ="/canvas/invite?connection_request_id=' + connection_request_id.toString() + '&button_label=' + encodeURI(button_label) + '&excludeIDs=' + encodeURI(excludeIDs.toString()) + '" frameborder="0" />';
-				document.getElementById('iframe_div').className="iframe_div_visible";
-			}
-			
-			function launchRequestFrame(connection_request_id, button_label, content)
-			{
-				document.getElementById('iframe_div').innerHTML = '<iframe id="frame" width="100%" height="100%" src ="/canvas/fbrequest?connection_request_id=' + connection_request_id.toString() + '&content=' + encodeURI(content) + '&button_label=' + encodeURI(button_label) + '" frameborder="0" />';
-				document.getElementById('iframe_div').className="iframe_div_visible";
-			} // Not using this anymore with Requests 2.0
-			
-			function fqlQuery(){
-                FB.api('/me', function(response) {
-                     var query = FB.Data.query('select name, hometown_location, sex, pic_square from user where uid={0}', response.id);
-                     query.wait(function(rows) {
- 
-                       document.getElementById('name').innerHTML =
-                         'Your name: ' + rows[0].name + "<br />" +
-                         '<img src="' + rows[0].pic_square + '" alt="" />' + "<br />";
-                     });
-                });
-            }
- 
-            function setStatus(){
-                status1 = document.getElementById('status').value;
-                FB.api(
-                  {
-                    method: 'status.set',
-                    status: status1
-                  },
-                  function(response) {
-                    if (response == 0){
-                        alert('Your facebook status not updated. Give Status Update Permission.');
-                    }
-                    else{
-                        alert('Your facebook status updated');
-                    }
-                  }
-                );
-            }
-			
-			function showStream(){
-                FB.api('/me', function(response) {
-                    //console.log(response.id);
-                    streamPublish(response.name, 'Show stream demo', 'hrefTitle', 'http://www.example.com', "Share example.com");
-                });
-            }
 
-            function share(){
-                var share = {
-                    method: 'stream.share',
-                    u: 'http://apps.facebook.com/play-music'
-                };
-
-                FB.ui(share, function(response) { console.log(response); });
-            }
-
-            function graphStreamPublish(body){
-                FB.api('/me/feed', 'post', { message: body }, function(response) {
-                    if (!response || response.error) {
-                        alert('Error occured');
-                    } else {
-                        alert('Post ID: ' + response.id);
-                    }
-                });
-            }
-			
-	*/		
 			function launchRequestDialog(content, request_type, item_type, item_id)
 			{
 				closeiFrame();
@@ -348,13 +316,53 @@ Response.AddHeader "Cache-Control", "no-cache"
 				document.getElementById('iframe_div').className="iframe_div_hidden";
 			}
 			-->
-        </script>
- 
-		<div id="iframe_div"></div>
+		</script>	
+		<div id="iframe_div"></div>		
 
-	  <div id="flashContent" class="hidden">
-	      	<h1>You need at least Flash Player 10.0 to view this page.</h1>
-	              <p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
-	  </div>
+        <!-- SWFObject's dynamic embed method replaces this alternative HTML content with Flash content when enough 
+             JavaScript and Flash plug-in support is available. The div is initially hidden so that it doesn't show
+             when JavaScript is disabled.
+        -->
+        <div id="flashContent">
+            <p>
+                To view this page ensure that Adobe Flash Player version 
+                10.2.0 or greater is installed. 
+            </p>
+            <script type="text/javascript"> 
+                var pageHost = ((document.location.protocol == "https:") ? "https://" : "http://"); 
+                document.write("<a href='http://www.adobe.com/go/getflashplayer'><img src='" 
+                                + pageHost + "www.adobe.com/images/shared/download_buttons/get_flash_player.gif' alt='Get Adobe Flash player' /></a>" ); 
+            </script> 
+        </div>
+
+        <noscript>
+            <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="100%" height="100%" id="Main">
+                <param name="movie" value="/site/Main.swf" />
+                <param name="quality" value="high" />
+                <param name="bgcolor" value="#ffffff" />
+                <param name="allowScriptAccess" value="sameDomain" />
+                <param name="allowFullScreen" value="true" />
+                <!--[if !IE]>-->
+                <object type="application/x-shockwave-flash" data="/site/Main.swf" width="100%" height="100%">
+                    <param name="quality" value="high" />
+                    <param name="bgcolor" value="#ffffff" />
+                    <param name="allowScriptAccess" value="sameDomain" />
+                    <param name="allowFullScreen" value="true" />
+                <!--<![endif]-->
+                <!--[if gte IE 6]>-->
+                    <p> 
+                        Either scripts and active content are not permitted to run or Adobe Flash Player version
+                        10.2.0 or greater is not installed.
+                    </p>
+                <!--<![endif]-->
+                    <a href="http://www.adobe.com/go/getflashplayer">
+                        <img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash Player" />
+                    </a>
+                <!--[if !IE]>-->
+                </object>
+                <!--<![endif]-->
+            </object>
+        </noscript>
+
     </body>
 </html>

@@ -81,7 +81,8 @@ Response.AddHeader "Cache-Control", "no-cache"
                 FB.init({appId: APP_ID, status: true, cookie: true, xfbml: true});
 
                 FB.getLoginStatus(function(response) {
-					alert("response: " + response);	
+					alert("response status: " + response.status);	
+					alert("response auth: " + response.authStatus);						
 					if (!response.session)
 					//either not logged in or hasn't granted app permission
 					{

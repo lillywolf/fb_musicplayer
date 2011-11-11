@@ -42,7 +42,8 @@ Response.AddHeader "Cache-Control", "no-cache"
         <link rel="stylesheet" type="text/css" href="/site/history/history.css" />
         <script type="text/javascript" src="/site/history/history.js"></script>
         <!-- END Browser History required section -->  
-            
+	 	<!-- Include support libraries -->
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>            
         <script type="text/javascript" src="/site/swfobject.js"></script>
         <script type="text/javascript">
             // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. 
@@ -80,10 +81,11 @@ Response.AddHeader "Cache-Control", "no-cache"
                 FB.init({appId: APP_ID, status: true, cookie: true, xfbml: true});
 
                 FB.getLoginStatus(function(response) {
-					alert("session: " + response.session);	
+					alert("response: " + response);	
 					if (!response.session)
 					//either not logged in or hasn't granted app permission
 					{
+						alert("no session");					
 						var REDIRECT_URI = "http://apps.facebook.com/" + CANVAS_URL;		
 						var PERMS = "email,publish_stream"; //comma separated list of extended permissions
 						var PARAMS = window.location.toString().slice(window.location.toString().indexOf('?'));
@@ -91,6 +93,7 @@ Response.AddHeader "Cache-Control", "no-cache"
 					}
 
                     else {
+						alert("session");	
 	                    // logged in and connected user, someone you know
 						// get id and access token
 						// make the swf visible and embed it

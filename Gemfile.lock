@@ -42,6 +42,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  ZenTest (= 4.6.2)
   httpclient (= 2.1.7)
   json (= 1.5.3)
   php (= 0.1.1)

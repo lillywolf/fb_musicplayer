@@ -40,27 +40,27 @@ Response.AddHeader "Cache-Control", "no-cache"
 		<!-- Include FBJSBridge to allow for SWF to Facebook communication. -->
 		<script type="text/javascript" src="/site/FBJSBridge.js"></script>
         <script type="text/javascript">
-            // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. 
-            var swfVersionStr = "10.2.0";
-            // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
-            var xiSwfUrlStr = "/site/playerProductInstall.swf";
-            var flashvars = {};
-            var params = {};
-            params.quality = "high";
-            params.bgcolor = "#ffffff";
-            params.allowscriptaccess = "sameDomain";
-            params.allowfullscreen = "true";
-            var attributes = {};
-            attributes.id = "Main";
-            attributes.name = "Main";
-            attributes.align = "middle";
-            swfobject.embedSWF(
-                "/site/Main.swf", "flashContent", 
-                "510", "100%", 
-                swfVersionStr, xiSwfUrlStr, 
-                flashvars, params, attributes);
-            // JavaScript enabled so display the flashContent div in case it is not replaced with a swf object.
-            swfobject.createCSS("#flashContent", "display:block;text-align:left;");
+            // // For version detection, set to min. required Flash Player version, or 0 (or 0.0.0), for no version detection. 
+            // var swfVersionStr = "10.2.0";
+            // // To use express install, set to playerProductInstall.swf, otherwise the empty string. 
+            // var xiSwfUrlStr = "/site/playerProductInstall.swf";
+            // var flashvars = {};
+            // var params = {};
+            // params.quality = "high";
+            // params.bgcolor = "#ffffff";
+            // params.allowscriptaccess = "sameDomain";
+            // params.allowfullscreen = "true";
+            // var attributes = {};
+            // attributes.id = "Main";
+            // attributes.name = "Main";
+            // attributes.align = "middle";
+            // swfobject.embedSWF(
+            //     "/site/Main.swf", "flashContent", 
+            //     "510", "100%", 
+            //     swfVersionStr, xiSwfUrlStr, 
+            //     flashvars, params, attributes);
+            // // JavaScript enabled so display the flashContent div in case it is not replaced with a swf object.
+            // swfobject.createCSS("#flashContent", "display:block;text-align:left;");
         </script>		
 
     </head>
@@ -80,7 +80,6 @@ Response.AddHeader "Cache-Control", "no-cache"
                 FB.init({appId: APP_ID, status: true, cookie: true, xfbml: true});
 
                 FB.getLoginStatus(function(response) {
-					alert("response: " + response);
 					if (!response.session)
 					//either not logged in or hasn't granted app permission
 					{
@@ -97,8 +96,11 @@ Response.AddHeader "Cache-Control", "no-cache"
 						// make the swf visible and embed it
 						SNID = response.session.uid;
 						access_token = response.session.access_token;
+						FB.api('/me/accounts', function(response) {
+						  alert('Your accounts: ' + response.toString());
+						});
+						
 						document.getElementById('page_heading_div').style.display="inline";
-
 						document.getElementById("flashContent").style.display = "inline";
 						var params = { wmode: "opaque" };
 						params.allowfullscreen = "true";
@@ -255,7 +257,7 @@ Response.AddHeader "Cache-Control", "no-cache"
 					    xhr.send(params);
 					}
 				);
-			}
+			}			
 			
 			function xhrHandler() {
 			  if (this.readyState != 4) {

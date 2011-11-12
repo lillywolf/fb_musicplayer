@@ -96,8 +96,14 @@ Response.AddHeader "Cache-Control", "no-cache"
 						// make the swf visible and embed it
 						SNID = response.session.uid;
 						access_token = response.session.access_token;
+						FB.api('/me', function(response) {
+							alert("me: " + JSON.stringify(response));
+						});
 						FB.api('/me/accounts', function(response) {
-						  alert('Your accounts: ' + JSON.stringify(response));
+							response.data.forEach(function(item) {
+								alert(JSON.stringify(item.id));
+								if (item.id == )
+							});
 						});
 						
 						document.getElementById('page_heading_div').style.display="inline";

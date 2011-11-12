@@ -1,6 +1,12 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    ParseTree (3.0.8)
+      RubyInline (>= 3.7.0)
+      sexp_processor (>= 3.0.0)
+    RubyInline (3.11.0)
+      ZenTest (~> 4.3)
+    ZenTest (4.6.2)
     actionmailer (2.3.11)
       actionpack (= 2.3.11)
     actionpack (2.3.11)
@@ -13,6 +19,12 @@ GEM
     activesupport (2.3.11)
     httpclient (2.1.7)
     json (1.5.3)
+    open4 (1.2.0)
+    php (0.1.1)
+      ParseTree (>= 3.0.4)
+      open4 (>= 1.0.1)
+      ruby_parser (>= 2.0.4)
+      sexp_processor (>= 3.0.3)
     rack (1.1.0)
     rails (2.3.11)
       actionmailer (= 2.3.11)
@@ -22,6 +34,9 @@ GEM
       activesupport (= 2.3.11)
       rake (>= 0.8.3)
     rake (0.9.2.2)
+    ruby_parser (2.3.1)
+      sexp_processor (~> 3.0)
+    sexp_processor (3.0.7)
 
 PLATFORMS
   ruby
@@ -29,5 +44,6 @@ PLATFORMS
 DEPENDENCIES
   httpclient (= 2.1.7)
   json (= 1.5.3)
+  php (= 0.1.1)
   rack (= 1.1.0)
   rails (= 2.3.11)

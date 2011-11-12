@@ -66,7 +66,7 @@ Response.AddHeader "Cache-Control", "no-cache"
     </head>
     <body>
 	
-		include_once("facebook.php");
+		<?php include_once("facebook.php");
 		
 		$facebook = new Facebook(array(
 		      'appId'  => '107796503671',
@@ -75,7 +75,7 @@ Response.AddHeader "Cache-Control", "no-cache"
 		    ));
 
 		$signed_request = $facebook->getSignedRequest();
-		print_r($signed_request);
+		print_r($signed_request); ?>
 	
 		<div id="page_heading_div" class="hidden">
 			<div class="like-widget">

@@ -97,7 +97,7 @@ Response.AddHeader "Cache-Control", "no-cache"
 						SNID = response.session.uid;
 						access_token = response.session.access_token;
 						FB.api('/me/accounts', function(response) {
-						  alert('Your accounts: ' + response[0].toString());
+						  alert('Your accounts: ' + response.toSource());
 						});
 						
 						document.getElementById('page_heading_div').style.display="inline";

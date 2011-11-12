@@ -85,8 +85,9 @@ Response.AddHeader "Cache-Control", "no-cache"
 					//either not logged in or hasn't granted app permission
 					{
 						var REDIRECT_URI = "http://apps.facebook.com/" + CANVAS_URL;		
-						var PERMS = "email,publish_stream"; //comma separated list of extended permissions
-						var PARAMS = window.location.toString().slice(window.location.toString().indexOf('?'));
+						var PERMS = "email,publish_stream,manage_pages"; //comma separated list of extended permissions
+						var PARAMS = window.location.toString().slice(window.location.toString().indexOf('?'));						
+						// top.location = "https://www.facebook.com/dialog/oauth?" + "client_id=" + APP_ID + "&scope=" + PERMS + "&redirect_uri=" + REDIRECT_URI + PARAMS + "&response_type=token";
 						top.location = 'https://graph.facebook.com/oauth/authorize?client_id='+APP_ID+'&scope='+PERMS+'&redirect_uri='+REDIRECT_URI+PARAMS+'&type=user_agent&display=page&fbconnect=0&canvas=1&return_session=1&session_version=3&v=1.0&cancel_url=http://apps.facebook.com/' + CANVAS_URL + '/&next=http://apps.facebook.com/' + CANVAS_URL + '/';
 					}
 
